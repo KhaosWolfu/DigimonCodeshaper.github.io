@@ -294,6 +294,7 @@ let audioTocado = false;
 document.addEventListener('click', () => {
     if (!audioTocado) {
         const audio = document.getElementById("lobbyAudio");
+        audio.volume = 0.02; // 50% do volume
         audio.play().catch(e => console.log("Erro ao tocar áudio:", e));
         audioTocado = true;
     }
