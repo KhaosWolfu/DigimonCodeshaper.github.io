@@ -188,6 +188,7 @@ function draw(){
 setInterval(draw,50);
 
 /* ------------------ SPA ------------------ */
+
 const mainContent = document.getElementById('mainContent');
 let currentPage = 'index'; // estado atual da tela
 
@@ -283,11 +284,29 @@ function attachEvents(){
                 if(data.success){
                     msg.style.color="lightgreen"; msg.textContent=data.message;
                     setTimeout(()=>{ alert('Login bem-sucedido!'); },1000);
+                    if (data.success) {
+                    localStorage.setItem('registered', 'true'); // <- marca que o usuário já registrou
+                    msg.style.color = "lightgreen";
+                    msg.textContent = data.message;
+
+                    setTimeout(() => {
+                    renderPage('login'); // <- vai para login (ou window.location.href se não SPA)
+    }, 2000);
+}
+
                 }else{ msg.style.color="red"; msg.textContent=data.error||"ID ou senha incorretos."; }
             }catch(err){ msg.style.color="red"; msg.textContent="Erro de conexão com o servidor."; }
         });
     }
 }
+// No carregamento da página, decide se mostra login ou registro
+window.addEventListener('load', () => {
+    if(localStorage.getItem('registered') === 'true'){
+        renderPage('login');
+    } else {
+        renderPage('index');
+    }
+});
 
 /* ------------------ ÁUDIO AO CLICAR ------------------ */
 let audioTocado = false;
