@@ -6,137 +6,33 @@
 <title>Digimon Codeshaper</title>
 <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        background: black;
-        overflow: hidden;
-        height:100vh;
-        width:100vw;
-        color:white;
-        font-family: monospace;
-        position: relative;
-    }
+    body { background: black; overflow: hidden; height:100vh; width:100vw; color:white; font-family: monospace; position: relative; }
     canvas { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
 
-    /* BOX CENTRAL */
-    .center-box {
-        position: absolute;
-        top:0;
-        left:50%;
-        transform:translateX(-50%);
-        background-color:#000;
-        width:80vw;
-        max-width:1080px;
-        height:100vh;
-        z-index:2;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:flex-start;
-        padding-top:8vh;
-        opacity:0;
-        transition: opacity 1.5s ease;
-    }
+    .center-box { position: absolute; top:0; left:50%; transform:translateX(-50%); background-color:#000; width:80vw; max-width:1080px; height:100vh; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:8vh; opacity:0; transition: opacity 1.5s ease; }
     .center-box.visible { opacity:1; }
     .center-box img { width:100vw; max-width:620px; height:auto; margin-bottom:0; margin-top:-120px; }
 
-    /* LOGIN/REGISTRO BOX */
-    .login-box {
-        background-color: rgba(255,255,255,0.05);
-        border:10px solid rgb(255,255,255);
-        padding:40px 50px;
-        border-radius:60px;
-        box-shadow:0 0 20px rgba(255,255,255,0.1);
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        width:80%;
-        max-width:600px;
-    }
-    .login-box h2 {
-        margin-bottom:5px;
-        font-size:2.4rem;
-        text-align:center;
-        letter-spacing:1px;
-        color:white;
-        text-shadow:0 0 1px white,0 0 1px #fff,0 0 1px #fff;
-    }
+    .login-box { background-color: rgba(255,255,255,0.05); border:10px solid rgb(255,255,255); padding:40px 50px; border-radius:60px; box-shadow:0 0 20px rgba(255,255,255,0.1); display:flex; flex-direction:column; align-items:center; width:80%; max-width:600px; }
+    .login-box h2 { margin-bottom:5px; font-size:2.4rem; text-align:center; letter-spacing:1px; color:white; text-shadow:0 0 1px white,0 0 1px #fff,0 0 1px #fff; }
     .input-container { position: relative; width:100%; margin-bottom:25px; }
-    .input-container input {
-        width:100%;
-        padding:14px 12px;
-        border:none;
-        border-bottom:2px solid white;
-        background:transparent;
-        color:white;
-        font-size:1rem;
-        outline:none;
-        transition:0.3s ease;
-    }
-    .input-container label {
-        position:absolute;
-        top:14px;
-        left:12px;
-        color:#aaa;
-        pointer-events:none;
-        transition:0.3s ease;
-        font-size:1rem;
-    }
+    .input-container input { width:100%; padding:14px 12px; border:none; border-bottom:2px solid white; background:transparent; color:white; font-size:1rem; outline:none; transition:0.3s ease; }
+    .input-container label { position:absolute; top:14px; left:12px; color:#aaa; pointer-events:none; transition:0.3s ease; font-size:1rem; }
     .input-container input:focus { border-bottom:2px solid white; }
-    .input-container input:focus + label,
-    .input-container input:not(:placeholder-shown) + label {
-        top:-10px; font-size:0.8rem; color:white;
-    }
-    .login-box button {
-        width:100%;
-        padding:12px;
-        background-color:white;
-        color:black;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-        font-weight:bold;
-        transition:0.3s;
-    }
+    .input-container input:focus + label, .input-container input:not(:placeholder-shown) + label { top:-10px; font-size:0.8rem; color:white; }
+    .login-box button { width:100%; padding:12px; background-color:white; color:black; border:none; border-radius:6px; cursor:pointer; font-weight:bold; transition:0.3s; }
     .login-box button:hover { background-color:black; color:white; border:1px solid white; }
 
-    /* POPUP */
-    .popup-overlay {
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background:black;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        z-index:9999;
-        opacity:1;
-        transition:opacity 1.5s ease;
-    }
+    .popup-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:black; display:flex; align-items:center; justify-content:center; z-index:9999; opacity:1; transition:opacity 1.5s ease; }
     .popup-overlay.hidden { opacity:0; pointer-events:none; }
-    .popup-box {
-        background:rgba(255,255,255,0.1);
-        border:2px solid white;
-        border-radius:20px;
-        padding:40px;
-        text-align:center;
-        max-width:500px;
-        box-shadow:0 0 20px white;
-        animation: popupFade 0.7s ease;
-    }
+    .popup-box { background:rgba(255,255,255,0.1); border:2px solid white; border-radius:20px; padding:40px; text-align:center; max-width:500px; box-shadow:0 0 20px white; animation: popupFade 0.7s ease; }
     .popup-box h3 { font-size:1.6rem; color:white; margin-bottom:15px; text-shadow:0 0 10px white,0 0 20px cyan; }
     .popup-box p { color:#ddd; font-size:1rem; margin-bottom:25px; }
-    .popup-box button {
-        background-color:white; color:black; border:none;
-        padding:10px 30px; border-radius:8px;
-        cursor:pointer; font-weight:bold; transition:0.3s;
-    }
+    .popup-box button { background-color:white; color:black; border:none; padding:10px 30px; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
     .popup-box button:hover { background-color:black; color:white; border:1px solid white; }
 
     @keyframes popupFade { from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
 
-    /* Responsividade */
     @media (max-width:768px){
         .center-box img { width:60vw; margin-top:-60px; }
         .login-box { width:90%; padding:25px 20px; max-width:320px; }
@@ -148,10 +44,8 @@
 <body>
 <canvas id="binaryCanvas"></canvas>
 
-<!-- ÁUDIO -->
 <audio id="lobbyAudio" src="lobby.mp3" preload="auto"></audio>
 
-<!-- POPUP -->
 <div id="popup" class="popup-overlay">
     <div class="popup-box">
         <h3>Parabéns!</h3>
@@ -160,10 +54,10 @@
     </div>
 </div>
 
-<!-- CONTEÚDO PRINCIPAL -->
 <div class="center-box" id="mainContent"></div>
 <script>
-    
+const API_URL = "http://4.228.58.211:3000"; // <- seu backend Node.js
+
 /* ------------------ MATRIZ BINÁRIA ------------------ */
 const canvas = document.getElementById('binaryCanvas');
 const ctx = canvas.getContext('2d');
@@ -188,9 +82,8 @@ function draw(){
 setInterval(draw,50);
 
 /* ------------------ SPA ------------------ */
-
 const mainContent = document.getElementById('mainContent');
-let currentPage = 'index'; // estado atual da tela
+let currentPage = 'index';
 
 function renderPage(page){
     currentPage = page;
@@ -232,8 +125,7 @@ function renderPage(page){
     }
     mainContent.innerHTML = html;
     mainContent.classList.add('visible');
-
-    attachEvents(); // adiciona eventos dos botões
+    attachEvents();
 }
 
 /* ------------------ POPUP ------------------ */
@@ -243,17 +135,17 @@ function fecharPopup(){
     setTimeout(()=>{ popup.style.display="none"; renderPage('index'); },1500);
 }
 
-/* ------------------ EVENTOS DOS BOTÕES ------------------ */
+/* ------------------ EVENTOS ------------------ */
 function attachEvents(){
     const registerBtn = document.getElementById('registerBtn');
     if(registerBtn){
         registerBtn.addEventListener('click', async ()=>{
-            const userId = document.getElementById('userId').value;
-            const password = document.getElementById('password').value;
+            const userId = document.getElementById('userId').value.trim();
+            const password = document.getElementById('password').value.trim();
             const msg = document.getElementById('msg');
             if(!userId||!password){ msg.style.color="red"; msg.textContent="Preencha todos os campos."; return; }
             try{
-                const res = await fetch("http://localhost:3000/registrar",{
+                const res = await fetch(`${API_URL}/registrar`,{
                     method:"POST",
                     headers:{"Content-Type":"application/json"},
                     body:JSON.stringify({userId,password})
@@ -263,65 +155,54 @@ function attachEvents(){
                     msg.style.color="lightgreen"; msg.textContent=data.message; 
                     setTimeout(()=>{ renderPage('login'); },2000);
                 }else{ msg.style.color="red"; msg.textContent=data.error||"Erro ao registrar."; }
-            }catch(err){ msg.style.color="red"; msg.textContent="Erro de conexão com o servidor."; }
+            }catch(err){ msg.style.color="red"; msg.textContent="Erro de conexão com o servidor."; console.error(err); }
         });
     }
 
     const loginBtn = document.getElementById('loginBtn');
     if(loginBtn){
         loginBtn.addEventListener('click', async ()=>{
-            const userId = document.getElementById('userId').value;
-            const password = document.getElementById('password').value;
+            const userId = document.getElementById('userId').value.trim();
+            const password = document.getElementById('password').value.trim();
             const msg = document.getElementById('msg');
             if(!userId||!password){ msg.style.color="red"; msg.textContent="Preencha todos os campos."; return; }
             try{
-                const res = await fetch("http://localhost:3000/login",{
+                const res = await fetch(`${API_URL}/login`,{
                     method:"POST",
                     headers:{"Content-Type":"application/json"},
                     body:JSON.stringify({userId,password})
                 });
                 const data = await res.json();
                 if(data.success){
-                    msg.style.color="lightgreen"; msg.textContent=data.message;
-                    setTimeout(()=>{ alert('Login bem-sucedido!'); },1000);
-                    if (data.success) {
-                    localStorage.setItem('registered', 'true'); // <- marca que o usuário já registrou
-                    msg.style.color = "lightgreen";
-                    msg.textContent = data.message;
-
-                    setTimeout(() => {
-                    renderPage('login'); // <- vai para login (ou window.location.href se não SPA)
-    }, 2000);
-}
-
+                    msg.style.color="lightgreen";
+                    msg.textContent=data.message;
+                    localStorage.setItem('registered', 'true');
+                    setTimeout(() => { renderPage('login'); },2000);
                 }else{ msg.style.color="red"; msg.textContent=data.error||"ID ou senha incorretos."; }
-            }catch(err){ msg.style.color="red"; msg.textContent="Erro de conexão com o servidor."; }
+            }catch(err){ msg.style.color="red"; msg.textContent="Erro de conexão com o servidor."; console.error(err); }
         });
     }
 }
-// No carregamento da página, decide se mostra login ou registro
+
+/* ------------------ LOAD ------------------ */
 window.addEventListener('load', () => {
     if(localStorage.getItem('registered') === 'true'){
         renderPage('login');
-    } else {
-        renderPage('index');
-    }
+    } else { renderPage('index'); }
 });
 
-/* ------------------ ÁUDIO AO CLICAR ------------------ */
+/* ------------------ ÁUDIO ------------------ */
 let audioTocado = false;
 document.addEventListener('click', () => {
     if (!audioTocado) {
         const audio = document.getElementById("lobbyAudio");
-        audio.volume = 0.02; // 50% do volume
+        audio.volume = 0.02;
         audio.play().catch(e => console.log("Erro ao tocar áudio:", e));
         audioTocado = true;
     }
 });
 
-/* Inicializa SPA com popup */
 renderPage('index');
-
 </script>
 </body>
 </html>
